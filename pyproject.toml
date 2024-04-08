@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "easyqr"
+version = "0.1.0"
+description = "A GUI Application for decode and encode QR Code"
+authors = ["zimolab <zimolab@aliyun.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10, <4.0"
+pyguiadapter = ">=0.2.21"
+qrcode = {extras = ["pil"], version = "^7.4.2"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
