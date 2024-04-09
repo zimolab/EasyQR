@@ -12,9 +12,24 @@
 
 ---
 ### 一些截图
-[截图](./screenshoots/img.png)
-[截图](./screenshoots/img_1.png)
-[截图](./screenshoots/img_2.png)
-[截图](./screenshoots/img_3.png)
-[截图](./screenshoots/img_4.png)
-[截图](./screenshoots/img_5.png)
+![截图](./screenshoots/img.png)
+
+---
+
+![截图](./screenshoots/img_1.png)
+
+---
+
+![截图](./screenshoots/img_2.png)
+
+---
+
+![截图](./screenshoots/img_3.png)
+
+---
+
+![截图](./screenshoots/img_4.png)
+
+---
+
+![截图](./screenshoots/img_5.png)
