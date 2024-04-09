@@ -2,8 +2,7 @@ from PyQt6.QtWidgets import QApplication
 from pyguiadapter.adapter import GUIAdapter
 from pyguiadapter.commons import DocumentFormat
 
-from easyqr.encoder.encode import make_qrcode
-from easyqr.encoder.configs import MAKE_QRCODE_CONFIGS, DOCUMENT
+from easyqr import make_qrcode, MAKE_QRCODE_CONFIGS
 
 APP_NAME = "Easy QR Code"
 VERSION = "0.1.0"
@@ -34,7 +33,6 @@ def set_window_configs(adapter: GUIAdapter):
 def add_functions(adapter: GUIAdapter):
     adapter.add(
         make_qrcode,
-        display_document=DOCUMENT,
         document_format=DocumentFormat.MARKDOWN,
         widget_configs=MAKE_QRCODE_CONFIGS,
     )
