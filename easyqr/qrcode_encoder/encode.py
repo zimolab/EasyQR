@@ -1,6 +1,6 @@
 import os.path
 from decimal import Decimal
-from typing import Optional, Type
+from typing import Optional, Type, List
 
 import qrcode
 from PyQt6.QtWidgets import QApplication
@@ -10,6 +10,7 @@ from pyguiadapter.interact import upopup
 from pyguiadapter.interact.uprint import uprint
 from qrcode.image.base import QRModuleDrawer
 from qrcode.image.styledpil import StyledPilImage
+from qrcode.image.styles.colormasks import ImageColorMask, QRColorMask
 
 from easyqr.utils import curdir
 from .configs import (
@@ -41,6 +42,7 @@ def make_qrcode(
     back_color: Color,
     module_drawer: str,
     size_ratio: float,
+    background_image_path: str,
     color_mask: str,
     color_mask_args: dict,
     embeded_image_path: str,
@@ -68,6 +70,7 @@ def make_qrcode(
     :param back_color: 背景颜色，默认为白色
     :param module_drawer: 控制生成二维码内点块元素的形状
     :param size_ratio: 该参数仅在手动指定元素形状后生效，且仅对特定几种形状（Square、GappedSquare、Circle）有效
+    :param background_image_path: 背景图片，若指定了该参数，则<b>颜色遮罩参数</b>不会生效
     :param color_mask:
     :param color_mask_args:
     :param embeded_image_path: 内嵌图片（logo）路径（当输出文件为svg格式，嵌入图片可能无法生效）
@@ -168,12 +171,30 @@ def make_qrcode(
             )
         )
 
+    # 检查背景图片路径，如果指定了，则检查文件是否存在，不存在则抛出异常
+    if background_image_path is not None and not os.path.isfile(background_image_path):
+        raise ValueError(
+            QApplication.tr(
+                "指定的背景图片文件{}不存在，请重新选择！".format(background_image_path)
+            )
+        )
+
     output_svg = output_filename.endswith(".svg")
     image_factory = _get_img_factory(output_svg, module_drawer)
     module_drawer_class = _get_module_drawer_class(output_svg, module_drawer)
     module_drawer_instance = _create_module_drawer_instance(
         module_drawer_class, size_ratio
     )
+    if background_image_path:
+        color_mask_instance = _create_img_color_mask(
+            back_color=back_color, background_image_path=background_image_path
+        )
+    elif color_mask:
+        # 暂时未实现
+        color_mask_instance = None
+    else:
+        color_mask_instance = None
+
     # 第二阶段生成二维码图片
     qr_obj = qrcode.QRCode(
         version=version,
@@ -183,13 +204,23 @@ def make_qrcode(
     )
     qr_obj.add_data(data, optimize=optimize)
     qr_obj.make(fit=fit)
-    img = qr_obj.make_image(
-        fill_color=fill_color.to_hex_string(with_alpha=False),
-        back_color=back_color.to_hex_string(with_alpha=False),
-        image_factory=image_factory,
-        module_drawer=module_drawer_instance,
-        embeded_image_path=embeded_image_path,
-    )
+    if color_mask_instance is not None:
+        img = qr_obj.make_image(
+            fill_color=fill_color.to_hex_string(with_alpha=False),
+            back_color=back_color.to_hex_string(with_alpha=False),
+            image_factory=image_factory,
+            module_drawer=module_drawer_instance,
+            embeded_image_path=embeded_image_path,
+            color_mask=color_mask_instance,
+        )
+    else:
+        img = qr_obj.make_image(
+            fill_color=fill_color.to_hex_string(with_alpha=False),
+            back_color=back_color.to_hex_string(with_alpha=False),
+            image_factory=image_factory,
+            module_drawer=module_drawer_instance,
+            embeded_image_path=embeded_image_path,
+        )
     # 第三阶段保存生成的图片
     img.save(output_filepath)
     logging.info("二维码生成成功！")
@@ -258,3 +289,16 @@ def _create_module_drawer_instance(
     if support_size_ration:
         return clazz(size_ratio=size_ratio)
     return clazz()
+
+
+def _create_color_mask(clor_mask: str, colors: List[Color] = None) -> QRColorMask:
+    pass
+
+
+def _create_img_color_mask(
+    background_image_path: str, back_color: Color
+) -> ImageColorMask:
+    return ImageColorMask(
+        back_color=back_color.to_rgb_tuple(with_alpha=False),
+        color_mask_path=background_image_path,
+    )

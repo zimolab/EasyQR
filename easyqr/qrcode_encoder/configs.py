@@ -87,6 +87,14 @@ DEFAULT_OVERWRITE_BEHAVIOR = OVERWRITE_BEHAVIORS[0]
 COLOR_MASK_SOLID_FILL = QApplication.tr("")
 COLOR_MASKS = {}
 
+EMBED_IMG_FILE_FILTERS = QApplication.tr(
+    "PNG文件(*.png);;JPG文件(*.jpg);;JPEG文件(*.jpeg);;所有文件(*.*)"
+)
+
+BACKGROUND_IMAGE_FILE_FILTERS = QApplication.tr(
+    "PNG文件(*.png);;JPG文件(*.jpg);;JPEG文件(*.jpeg);;GIF文件(*.gif);;所有文件(*.*)"
+)
+
 MAKE_QRCODE_CONFIGS = {
     "output_dir": {
         "widget_class": DirPathEdit.__name__,
@@ -189,6 +197,14 @@ MAKE_QRCODE_CONFIGS = {
         "max_value": 1.00000,
         "default_value_description": QApplication.tr("使用默认值({})"),
     },
+    "background_image_path": {
+        "widget_class": FilePathEdit.__name__,
+        "label": QApplication.tr("背景图片路径"),
+        "default": None,
+        "filters": BACKGROUND_IMAGE_FILE_FILTERS,
+        "button_text": QApplication.tr("选择文件"),
+        "default_value_description": QApplication.tr("不使用背景图片"),
+    },
     "color_mask": {
         "label": QApplication.tr("颜色遮罩"),
         "default": None,
@@ -203,7 +219,7 @@ MAKE_QRCODE_CONFIGS = {
         "widget_class": FilePathEdit.__name__,
         "label": QApplication.tr("内嵌图片路径"),
         "default": None,
-        "filters": "PNG文件(*.png)",
+        "filters": EMBED_IMG_FILE_FILTERS,
         "button_text": QApplication.tr("选择文件"),
         "default_value_description": QApplication.tr("不使用内嵌图片"),
     },
