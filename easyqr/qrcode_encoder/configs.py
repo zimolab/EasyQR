@@ -313,5 +313,3 @@ MAKE_QRCODE_CONFIGS = {
         "text": "是否展示生成的二维码图片？",
     },
 }
-
-DOCUMENT = """"""

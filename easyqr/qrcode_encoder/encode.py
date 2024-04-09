@@ -193,7 +193,7 @@ def make_qrcode(
             )
         )
 
-    image_factory = _get_img_factory(output_svg, module_drawer)
+    image_factory = _get_img_factory(output_svg)
     module_drawer_class = _get_module_drawer_class(output_svg, module_drawer)
     module_drawer_instance = _create_module_drawer_instance(
         module_drawer_class, size_ratio
@@ -257,11 +257,10 @@ def _print_img(img_path: str):
     uprint()
 
 
-def _get_img_factory(output_svg: bool, module_drawer: str):
+def _get_img_factory(output_svg: bool) -> Type[StyledPilImage]:
     if output_svg:
         return DEFAULT_SVG_FACTORY
-    if not module_drawer:
-        return StyledPilImage
+    return StyledPilImage
 
 
 def _get_module_drawer_class(
@@ -269,28 +268,27 @@ def _get_module_drawer_class(
 ) -> Optional[Type[QRModuleDrawer]]:
     if not module_drawer:
         return None
-    module_drawer = module_drawer.strip()
     if output_svg and module_drawer not in (CIRCLE_DRAWER, SQUARE_DRAWER):
         raise ValueError(
             QApplication.tr(
-                "当输出文件为svg格式时，点块形状只能为{}或{}，请重新指定！".format(
+                "当输出文件为svg格式时，点块形状只能支持{}或{}，请重新指定！".format(
                     CIRCLE_DRAWER, SQUARE_DRAWER
                 )
             )
         )
 
     try:
-        module_drawer_obj = MODULE_DRAWERS.get(module_drawer)
+        module_drawer_classes = MODULE_DRAWERS.get(module_drawer)
     except KeyError:
         raise ValueError(
             QApplication.tr("未知的点块形状{}，请重新指定！".format(module_drawer))
         )
-    if not isinstance(module_drawer_obj, tuple):
-        return module_drawer_obj
+    if not isinstance(module_drawer_classes, tuple):
+        return module_drawer_classes
     idx = PNG_DRAWER_IDX
     if output_svg:
         idx = SVG_DRAWER_IDX
-    return module_drawer_obj[idx]
+    return module_drawer_classes[idx]
 
 
 def _create_module_drawer_instance(
