@@ -1,26 +1,37 @@
 import os.path
+from decimal import Decimal
+from typing import Optional, Type
 
+import qrcode
 from PyQt6.QtWidgets import QApplication
 from function2widgets.widgets.misc import Color
 from pyguiadapter.interact import ulogging as logging
 from pyguiadapter.interact import upopup
 from pyguiadapter.interact.uprint import uprint
-from qrcode.image.svg import SvgPathImage
-import qrcode
+from qrcode.image.base import QRModuleDrawer
+from qrcode.image.styledpil import StyledPilImage
 
 from easyqr.utils import curdir
 from .configs import (
     OVERWRITE_BEHAVIOR_ASK,
     OVERWRITE_BEHAVIOR_OVERWRITE,
     ERR_CORRECTION_LEVELS,
+    MODULE_DRAWERS,
+    SQUARE_DRAWER,
+    CIRCLE_DRAWER,
+    SVG_DRAWER_IDX,
+    PNG_DRAWER_IDX,
+    DEFAULT_SIZE_RATIO,
+    DEFAULT_SVG_FACTORY,
+    MODULE_DRAWERS_SUPPORT_SIZE_RATIO,
 )
 
 
 def make_qrcode(
     output_dir: str,
     output_filename: str,
-    overwrite_behavior: str,
     data: str,
+    overwrite_behavior: str,
     optimize: int,
     version: int,
     error_correction: str,
@@ -38,15 +49,16 @@ def make_qrcode(
     """
     为制定文本数据生成二维码图像，并保存到本地文件。可通过多个参数控制二维码生成结果。
 
-
     二维码生成基于**python-qrcode**，请参考：
     [https://github.com/lincolnloop/python-qrcode](https://github.com/lincolnloop/python-qrcode)
     获取该库详细信息以及各参数作用及取值。
 
+    Note: 经过测试，在生成CSV格式的图片时，填充色和背景色设置可能无法生效。
+
     :param output_dir: 输出文件目录，若为空，则将当前工作目录作为输出文件目录
     :param output_filename: 输出文件名称，必须是.png文件或.svg文件
-    :param overwrite_behavior: 当指定位置下存在同名文件时，是否进行覆盖
     :param data: 要编码的文本数据（请注意数据长度，数据太长可能会造成编码失败）
+    :param overwrite_behavior: 当指定位置下存在同名文件时，是否进行覆盖
     :param optimize: 优化级别
     :param version: 该参数控制生成二维码的尺寸，从1到40，如果设置为None，则在生成图片时自动判断
     :param error_correction: 纠错级别，级别越高，纠错能力越强，但载荷容量越小
@@ -55,16 +67,18 @@ def make_qrcode(
     :param fill_color: 填充颜色，默认为黑色
     :param back_color: 背景颜色，默认为白色
     :param module_drawer: 控制生成二维码内点块元素的形状
-    :param size_ratio: 该参数仅在手动指定元素形状后生效
+    :param size_ratio: 该参数仅在手动指定元素形状后生效，且仅对特定几种形状（Square、GappedSquare、Circle）有效
     :param color_mask:
     :param color_mask_args:
-    :param embeded_image_path: 内嵌图片（logo）路径
+    :param embeded_image_path: 内嵌图片（logo）路径（当输出文件为svg格式，嵌入图片可能无法生效）
     :param display_qrcode_img: 展示生成的二维码图片
     :return:
     """
     logging.enable_timestamp(True)
-    # 第一阶段，尽可能完成参数校验，及早抛出异常
     logging.info(QApplication.tr("开始生成二维码..."))
+
+    # 第一阶段，尽可能完成参数校验，及早抛出异常
+    # 检查输出目录合法性
     if not output_dir:
         output_dir = curdir()
         logging.warning(
@@ -74,20 +88,21 @@ def make_qrcode(
                 )
             )
         )
+    # 检查输出文件名合法性
     if isinstance(output_filename, str):
         output_filename = output_filename.strip()
     if not output_filename:
         raise ValueError(QApplication.tr("输出文件名为空，请指定输出文件名！"))
-
     if not output_filename.endswith(".png") and not output_filename.endswith(".svg"):
         raise ValueError(
             QApplication.tr(
                 "目前仅支持生成png、svg格式图片，输出文件名必须以.png或.svg结尾，请重新指定！"
             )
         )
-
+    # 获取输出文件最终路径
     output_filepath = os.path.abspath(os.path.join(output_dir, output_filename))
     logging.info(QApplication.tr("输出图片文件路径：{}".format(output_filepath)))
+    # 在目标文件路径存在文件时，根据用户设置进行覆盖或取消操作
     if os.path.isfile(output_filepath):
         quit_msg = QApplication.tr("目标文件已存在，取消生成！")
         will_be_overwrite_msg = QApplication.tr("{}将被覆盖!".format(output_filepath))
@@ -103,7 +118,7 @@ def make_qrcode(
             logging.warning(quit_msg)
             upopup.warning(quit_msg)
             return
-
+    # 检查待编码的数据是否为空，不允许对空数据进行编码
     if not data:
         raise ValueError(QApplication.tr("待编码数据为空，请输入要编码的数据！"))
 
@@ -112,13 +127,13 @@ def make_qrcode(
         logging.info(QApplication.tr("使用默认优化级别"))
     else:
         logging.info(QApplication.tr("当前优化级别为：{}".format(optimize)))
-
+    # 根据version参数决定使用使用fit参数
     if version is None:
         logging.info(QApplication.tr("未指定版本，将自动选择最佳尺寸"))
         fit = True
     else:
         fit = False
-
+    # 检查纠错级别，当其为字符串时，将其转换为对应的值
     if isinstance(error_correction, str):
         error_correction = ERR_CORRECTION_LEVELS.get(error_correction, None)
         if error_correction is None:
@@ -128,6 +143,8 @@ def make_qrcode(
                 )
             )
     logging.info(QApplication.tr("当前纠错级别为：{}".format(error_correction)))
+
+    # 检查填充颜色，当其为字符串时，将其转换为对应的值
     if isinstance(fill_color, str):
         fill_color = Color.from_string(fill_color)
     logging.info(
@@ -135,6 +152,7 @@ def make_qrcode(
             "当前填充颜色为：{}".format(fill_color.to_hex_string(with_alpha=False))
         )
     )
+    # 检查背景颜色，当其为字符串时，将其转换为对应的值
     if isinstance(back_color, str):
         back_color = Color.from_string(back_color)
     logging.info(
@@ -142,7 +160,7 @@ def make_qrcode(
             "当前背景颜色为：{}".format(back_color.to_hex_string(with_alpha=False))
         )
     )
-
+    # 检查内嵌图片文件，如果指定了，则检查文件是否存在，不存在则抛出异常
     if embeded_image_path is not None and not os.path.isfile(embeded_image_path):
         raise ValueError(
             QApplication.tr(
@@ -150,13 +168,13 @@ def make_qrcode(
             )
         )
 
-    # 开始生成二维码
-    svg_format = output_filename.endswith(".svg")
-    if svg_format:
-        image_factory = SvgPathImage
-    else:
-        image_factory = None
-
+    output_svg = output_filename.endswith(".svg")
+    image_factory = _get_img_factory(output_svg, module_drawer)
+    module_drawer_class = _get_module_drawer_class(output_svg, module_drawer)
+    module_drawer_instance = _create_module_drawer_instance(
+        module_drawer_class, size_ratio
+    )
+    # 第二阶段生成二维码图片
     qr_obj = qrcode.QRCode(
         version=version,
         error_correction=error_correction,
@@ -169,15 +187,14 @@ def make_qrcode(
         fill_color=fill_color.to_hex_string(with_alpha=False),
         back_color=back_color.to_hex_string(with_alpha=False),
         image_factory=image_factory,
+        module_drawer=module_drawer_instance,
+        embeded_image_path=embeded_image_path,
     )
+    # 第三阶段保存生成的图片
     img.save(output_filepath)
     logging.info("二维码生成成功！")
     if display_qrcode_img:
-        _send_qrcode_to_output(output_filepath)
-
-
-def _embed_image():
-    pass
+        _print_img(output_filepath)
 
 
 def _ask_if_overwrite(file_path: str) -> bool:
@@ -185,8 +202,59 @@ def _ask_if_overwrite(file_path: str) -> bool:
     return upopup.question(msg, title=QApplication.tr("是否覆盖文件？"))
 
 
-def _send_qrcode_to_output(img_path: str):
+def _print_img(img_path: str):
     img_ele = f'<img src="{img_path}" />'
     uprint()
     uprint(img_ele, html=True)
     uprint()
+
+
+def _get_img_factory(output_svg: bool, module_drawer: str):
+    if output_svg:
+        return DEFAULT_SVG_FACTORY
+    if not module_drawer:
+        return StyledPilImage
+
+
+def _get_module_drawer_class(
+    output_svg: bool, module_drawer: Optional[str]
+) -> Optional[Type[QRModuleDrawer]]:
+    if not module_drawer:
+        return None
+    module_drawer = module_drawer.strip()
+    if output_svg and module_drawer not in (CIRCLE_DRAWER, SQUARE_DRAWER):
+        raise ValueError(
+            QApplication.tr(
+                "当输出文件为svg格式时，点块形状只能为{}或{}，请重新指定！".format(
+                    CIRCLE_DRAWER, SQUARE_DRAWER
+                )
+            )
+        )
+
+    try:
+        module_drawer_obj = MODULE_DRAWERS.get(module_drawer)
+    except KeyError:
+        raise ValueError(
+            QApplication.tr("未知的点块形状{}，请重新指定！".format(module_drawer))
+        )
+    if not isinstance(module_drawer_obj, tuple):
+        return module_drawer_obj
+    idx = PNG_DRAWER_IDX
+    if output_svg:
+        idx = SVG_DRAWER_IDX
+    return module_drawer_obj[idx]
+
+
+def _create_module_drawer_instance(
+    clazz: Type[QRModuleDrawer], size_ratio: float
+) -> Optional[QRModuleDrawer]:
+    if clazz is None:
+        return None
+    # 创建点块形状绘制器实例
+    if size_ratio is None or size_ratio <= 0:
+        size_ratio = DEFAULT_SIZE_RATIO
+    size_ratio = Decimal(size_ratio)
+    support_size_ration = clazz in MODULE_DRAWERS_SUPPORT_SIZE_RATIO
+    if support_size_ration:
+        return clazz(size_ratio=size_ratio)
+    return clazz()

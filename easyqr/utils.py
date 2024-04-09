@@ -14,5 +14,5 @@ def rand_str(length: int = 8) -> str:
     )
 
 
-def rand_filename(prefix: str = "", ext: Literal[".png", ".svg"] = ".png") -> str:
+def rand_filename(prefix: str = "", ext: str = ".png") -> str:
     return f"{prefix}{rand_str()}{ext}"
