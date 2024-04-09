@@ -55,7 +55,7 @@ def make_qrcode(
     [https://github.com/lincolnloop/python-qrcode](https://github.com/lincolnloop/python-qrcode)
     获取该库详细信息以及各参数作用及取值。
 
-    Note: 经过测试，在生成CSV格式的图片时，填充色和背景色设置可能无法生效。
+    Note: 经过测试，在生成SVG格式的图片时，填充色和背景色设置可能无法生效。
 
     :param output_dir: 输出文件目录，若为空，则将当前工作目录作为输出文件目录
     :param output_filename: 输出文件名称，必须是.png文件或.svg文件
@@ -71,7 +71,7 @@ def make_qrcode(
     :param module_drawer: 控制生成二维码内点块元素的形状
     :param size_ratio: 该参数仅在手动指定元素形状后生效，且仅对特定几种形状（Square、GappedSquare、Circle）有效
     :param background_image_path: 背景图片，若指定了该参数，则<b>颜色遮罩参数</b>不会生效
-    :param color_mask:
+    :param color_mask: 颜色遮罩模式，当指定了背景图片时，该参数不生效
     :param color_mask_args:
     :param embeded_image_path: 内嵌图片（logo）路径（当输出文件为svg格式，嵌入图片可能无法生效）
     :param display_qrcode_img: 展示生成的二维码图片
