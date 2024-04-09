@@ -5,7 +5,13 @@ from function2widgets.widgets.numberinput import Slider
 from function2widgets.widgets.pathedit import DirPathEdit, FilePathEdit
 from function2widgets.widgets.selectwidget import ComboBox, RadioButtonGroup
 from function2widgets.widgets.textedit import PlainTextEdit
-from qrcode.image.svg import SvgPathImage
+from pyguiadapter.commons import get_param_widget_factory
+from qrcode.constants import (
+    ERROR_CORRECT_L,
+    ERROR_CORRECT_M,
+    ERROR_CORRECT_Q,
+    ERROR_CORRECT_H,
+)
 from qrcode.image.styles.moduledrawers.pil import (
     SquareModuleDrawer,
     GappedSquareModuleDrawer,
@@ -18,14 +24,22 @@ from qrcode.image.styles.moduledrawers.svg import (
     SvgPathSquareDrawer,
     SvgPathCircleDrawer,
 )
-from qrcode.constants import (
-    ERROR_CORRECT_L,
-    ERROR_CORRECT_M,
-    ERROR_CORRECT_Q,
-    ERROR_CORRECT_H,
+from qrcode.image.styles.colormasks import (
+    SolidFillColorMask,
+    RadialGradiantColorMask,
+    SquareGradiantColorMask,
+    HorizontalGradiantColorMask,
+    VerticalGradiantColorMask,
 )
+from qrcode.image.svg import SvgPathImage
 
 from easyqr.utils import curdir, rand_filename
+from .widget import ColorsGroupWidget
+
+# 注册自定义控件
+_param_widget_factory = get_param_widget_factory()
+if not _param_widget_factory.is_registered(ColorsGroupWidget.__name__):
+    _param_widget_factory.register(ColorsGroupWidget.__name__, ColorsGroupWidget)
 
 SQUARE_DRAWER = QApplication.tr("Square")
 CIRCLE_DRAWER = QApplication.tr("Circle")
@@ -84,8 +98,73 @@ OVERWRITE_BEHAVIORS = (
 )
 DEFAULT_OVERWRITE_BEHAVIOR = OVERWRITE_BEHAVIORS[0]
 
-COLOR_MASK_SOLID_FILL = QApplication.tr("")
-COLOR_MASKS = {}
+
+COLOR_MASK_SOLID_FILL = QApplication.tr("纯色填充")
+COLOR_MASK_RADIAL_GRADIENT = QApplication.tr("径向渐变(圆形)")
+COLOR_MASK_SQUARE_RADIAL_GRADIENT = QApplication.tr("径向渐变(方形)")
+COLOR_MASK_HORIZONTAL_GRADIENT = QApplication.tr("水平渐变")
+COLOR_MASK_VERTICAL_GRADIENT = QApplication.tr("垂直渐变")
+
+_RADIAL_GRADIENT = QApplication.tr("径向渐变")
+BACK_COLOR_LABEL = QApplication.tr("背景颜色(全部)")
+FRONT_COLOR_LABEL = QApplication.tr("前景颜色({})".format(COLOR_MASK_SOLID_FILL))
+CENTER_COLOR_LABEL = QApplication.tr("中心颜色({})".format(_RADIAL_GRADIENT))
+EDGE_COLOR_LABEL = QApplication.tr("边缘颜色({})".format(_RADIAL_GRADIENT))
+LEFT_COLOR_LABEL = QApplication.tr(
+    "左侧颜色({})".format(COLOR_MASK_HORIZONTAL_GRADIENT)
+)
+RIGHT_COLOR_LABEL = QApplication.tr(
+    "右侧颜色({})".format(COLOR_MASK_HORIZONTAL_GRADIENT)
+)
+TOP_COLOR_LABEL = QApplication.tr("上侧颜色({})".format(COLOR_MASK_VERTICAL_GRADIENT))
+BOTTOM_COLOR_LABEL = QApplication.tr(
+    "下侧颜色({})".format(COLOR_MASK_VERTICAL_GRADIENT)
+)
+
+DEFAULT_COLOR_MASK_COLORS = {
+    BACK_COLOR_LABEL: Color(255, 255, 255),
+    FRONT_COLOR_LABEL: Color(0, 0, 0),
+    CENTER_COLOR_LABEL: Color(0, 0, 0),
+    EDGE_COLOR_LABEL: Color(0, 0, 255),
+    LEFT_COLOR_LABEL: Color(0, 0, 0),
+    RIGHT_COLOR_LABEL: Color(0, 0, 255),
+    TOP_COLOR_LABEL: Color(0, 0, 0),
+    BOTTOM_COLOR_LABEL: Color(0, 0, 255),
+}
+
+COLOR_MASKS = {
+    COLOR_MASK_SOLID_FILL: SolidFillColorMask,
+    COLOR_MASK_RADIAL_GRADIENT: RadialGradiantColorMask,
+    COLOR_MASK_SQUARE_RADIAL_GRADIENT: SquareGradiantColorMask,
+    COLOR_MASK_HORIZONTAL_GRADIENT: HorizontalGradiantColorMask,
+    COLOR_MASK_VERTICAL_GRADIENT: VerticalGradiantColorMask,
+}
+COLOR_MASK_REQUIRED_COLOR_LABELS = {
+    SolidFillColorMask: (
+        BACK_COLOR_LABEL,
+        FRONT_COLOR_LABEL,
+    ),
+    RadialGradiantColorMask: (
+        BACK_COLOR_LABEL,
+        CENTER_COLOR_LABEL,
+        EDGE_COLOR_LABEL,
+    ),
+    SquareGradiantColorMask: (
+        BACK_COLOR_LABEL,
+        CENTER_COLOR_LABEL,
+        EDGE_COLOR_LABEL,
+    ),
+    HorizontalGradiantColorMask: (
+        BACK_COLOR_LABEL,
+        LEFT_COLOR_LABEL,
+        RIGHT_COLOR_LABEL,
+    ),
+    VerticalGradiantColorMask: (
+        BACK_COLOR_LABEL,
+        TOP_COLOR_LABEL,
+        BOTTOM_COLOR_LABEL,
+    ),
+}
 
 EMBED_IMG_FILE_FILTERS = QApplication.tr(
     "PNG文件(*.png);;JPG文件(*.jpg);;JPEG文件(*.jpeg);;所有文件(*.*)"
@@ -206,14 +285,19 @@ MAKE_QRCODE_CONFIGS = {
         "default_value_description": QApplication.tr("不使用背景图片"),
     },
     "color_mask": {
+        "widget_class": ComboBox.__name__,
         "label": QApplication.tr("颜色遮罩"),
         "default": None,
+        "items": {name: date for name, date in COLOR_MASKS.items()},
         "default_value_description": QApplication.tr("不使用颜色遮罩"),
     },
-    "color_mask_args": {
+    "color_mask_colors": {
+        "widget_class": ColorsGroupWidget.__name__,
         "label": QApplication.tr("颜色遮罩参数"),
-        "default": None,
-        "default_value_description": QApplication.tr("不使用颜色遮罩"),
+        "default": {},
+        "colors": DEFAULT_COLOR_MASK_COLORS,
+        "columns": 2,
+        # "default_value_description": QApplication.tr("不使用颜色遮罩"),
     },
     "embeded_image_path": {
         "widget_class": FilePathEdit.__name__,

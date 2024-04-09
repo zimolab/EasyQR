@@ -1,6 +1,7 @@
+import inspect
 import os.path
 from decimal import Decimal
-from typing import Optional, Type, List
+from typing import Optional, Type, Union, Dict, List
 
 import qrcode
 from PyQt6.QtWidgets import QApplication
@@ -25,6 +26,8 @@ from .configs import (
     DEFAULT_SIZE_RATIO,
     DEFAULT_SVG_FACTORY,
     MODULE_DRAWERS_SUPPORT_SIZE_RATIO,
+    COLOR_MASKS,
+    COLOR_MASK_REQUIRED_COLOR_LABELS,
 )
 
 
@@ -43,8 +46,8 @@ def make_qrcode(
     module_drawer: str,
     size_ratio: float,
     background_image_path: str,
-    color_mask: str,
-    color_mask_args: dict,
+    color_mask: Type[QRColorMask],
+    color_mask_colors: dict,
     embeded_image_path: str,
     display_qrcode_img: bool,
 ):
@@ -72,7 +75,7 @@ def make_qrcode(
     :param size_ratio: 该参数仅在手动指定元素形状后生效，且仅对特定几种形状（Square、GappedSquare、Circle）有效
     :param background_image_path: 背景图片，若指定了该参数，则<b>颜色遮罩参数</b>不会生效
     :param color_mask: 颜色遮罩模式，当指定了背景图片时，该参数不生效
-    :param color_mask_args:
+    :param color_mask_colors: 遮罩颜色，不同的遮罩模式所需颜色不同，仅在启用颜色颜色遮罩模式时生效，且当选择了背景图片时，该参数不生效
     :param embeded_image_path: 内嵌图片（logo）路径（当输出文件为svg格式，嵌入图片可能无法生效）
     :param display_qrcode_img: 展示生成的二维码图片
     :return:
@@ -91,6 +94,7 @@ def make_qrcode(
                 )
             )
         )
+
     # 检查输出文件名合法性
     if isinstance(output_filename, str):
         output_filename = output_filename.strip()
@@ -102,6 +106,16 @@ def make_qrcode(
                 "目前仅支持生成png、svg格式图片，输出文件名必须以.png或.svg结尾，请重新指定！"
             )
         )
+
+    # 生成.svg格式时存在一些约束条件
+    output_svg = output_filename.endswith(".svg")
+    if output_svg and embeded_image_path:
+        raise ValueError(QApplication.tr("生成.svg文件模式下不支持内嵌图片！"))
+    if output_svg and background_image_path:
+        raise ValueError(QApplication.tr("生成.svg文件模式下不支持背景图片！"))
+    if output_svg and color_mask:
+        raise ValueError(QApplication.tr("生成.svg文件模式下不支持颜色遮罩！"))
+
     # 获取输出文件最终路径
     output_filepath = os.path.abspath(os.path.join(output_dir, output_filename))
     logging.info(QApplication.tr("输出图片文件路径：{}".format(output_filepath)))
@@ -179,7 +193,6 @@ def make_qrcode(
             )
         )
 
-    output_svg = output_filename.endswith(".svg")
     image_factory = _get_img_factory(output_svg, module_drawer)
     module_drawer_class = _get_module_drawer_class(output_svg, module_drawer)
     module_drawer_instance = _create_module_drawer_instance(
@@ -189,11 +202,16 @@ def make_qrcode(
         color_mask_instance = _create_img_color_mask(
             back_color=back_color, background_image_path=background_image_path
         )
-    elif color_mask:
-        # 暂时未实现
+    elif isinstance(color_mask, QRColorMask):
+        color_mask_instance = color_mask
+    elif inspect.isclass(color_mask) and issubclass(color_mask, QRColorMask):
+        color_mask_instance = _create_color_mask_instance(color_mask, color_mask_colors)
+    elif isinstance(color_mask, str):
+        color_mask_instance = _create_color_mask_instance(color_mask, color_mask_colors)
+    elif color_mask is None:
         color_mask_instance = None
     else:
-        color_mask_instance = None
+        raise ValueError(QApplication.tr(f"无效的颜色遮罩类型：{type(color_mask)}"))
 
     # 第二阶段生成二维码图片
     qr_obj = qrcode.QRCode(
@@ -219,7 +237,6 @@ def make_qrcode(
             back_color=back_color.to_hex_string(with_alpha=False),
             image_factory=image_factory,
             module_drawer=module_drawer_instance,
-            embeded_image_path=embeded_image_path,
         )
     # 第三阶段保存生成的图片
     img.save(output_filepath)
@@ -291,8 +308,36 @@ def _create_module_drawer_instance(
     return clazz()
 
 
-def _create_color_mask(clor_mask: str, colors: List[Color] = None) -> QRColorMask:
-    pass
+def _get_required_colors(
+    color_mask_class: Type[QRColorMask], color_mask_colors: Dict[str, Color]
+) -> List:
+    if color_mask_class is None:
+        raise ValueError(QApplication.tr(f"未指定颜色遮罩类型！"))
+    required_color_labels = COLOR_MASK_REQUIRED_COLOR_LABELS.get(color_mask_class, None)
+    if not required_color_labels:
+        raise ValueError(
+            QApplication.tr(f"无法获取颜色遮罩类型'{color_mask_class}'的必要颜色")
+        )
+    return [
+        color_mask_colors.get(color_label).to_rgb_tuple(with_alpha=False)
+        for color_label in required_color_labels
+    ]
+
+
+def _create_color_mask_instance(
+    color_mask: Union[Type[QRColorMask], str], color_mask_colors: Dict[str, Color]
+) -> Optional[QRColorMask]:
+    if not color_mask:
+        return None
+    color_mask_class = color_mask
+    if isinstance(color_mask, str):
+        color_mask_class = COLOR_MASKS.get(color_mask, None)
+        if not color_mask_class:
+            raise ValueError(
+                QApplication.tr("未知的颜色遮罩类型：{}".format(color_mask))
+            )
+    init_args = _get_required_colors(color_mask_class, color_mask_colors)
+    return color_mask_class(*init_args)
 
 
 def _create_img_color_mask(
