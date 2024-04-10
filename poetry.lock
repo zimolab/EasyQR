@@ -229,6 +229,23 @@ files = [
 ]
 
 [[package]]
+name = "python-barcode"
+version = "0.15.1"
+description = "Create standard barcodes with Python. No external modules needed. (optional Pillow support included)."
+optional = false
+python-versions = "*"
+files = [
+    {file = "python-barcode-0.15.1.tar.gz", hash = "sha256:3b1825fbdb11e597466dff4286b4ea9b1e86a57717b59e563ae679726fc854de"},
+    {file = "python_barcode-0.15.1-py3-none-any.whl", hash = "sha256:057636fba37369c22852410c8535b36adfbeb965ddfd4e5b6924455d692e0886"},
+]
+
+[package.dependencies]
+pillow = {version = "*", optional = true, markers = "extra == \"images\""}
+
+[package.extras]
+images = ["pillow"]
+
+[[package]]
 name = "qrcode"
 version = "7.4.2"
 description = "QR Code image generator"
@@ -288,4 +305,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10, <4.0"
-content-hash = "55da4cc0b2339b1eaf551ceef4836d31108e0ad01b64ee96b7ee750877b28c38"
+content-hash = "b29a4ff4e45c1742407052ddf24988fd63da368c7a160c75ec5cc45ba7d228b7"
