@@ -24,7 +24,9 @@ MAKE_BARCODE_CONFIGS = {
         "default_value_description": TR_BARCODE_EXTRA_ARGS_DEFAULT_DESC,
         "window_title": TR_BARCODE_EXTRA_ARGS_WINDOW_TITLE,
     },
-    "module_width": {},
+    "module_width": {
+        
+    },
     "module_height": {},
     "quiet_zone": {},
     "font_size": {},

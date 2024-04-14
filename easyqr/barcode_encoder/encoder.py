@@ -1,5 +1,6 @@
 import os
 
+from function2widgets.widgets.misc import Color
 from barcode import get_barcode_class
 from barcode.writer import SVGWriter, ImageWriter
 
@@ -41,6 +42,15 @@ class BarCodeEncoder(BaseEncoder):
         overwrite_behavior: str,
         barcode_type: str = None,
         barcode_extra_args: dict = None,
+        module_width: int = None,
+        module_height: int = None,
+        quiet_zone: int = None,
+        font_size: int = None,
+        background: Color = None,
+        forground: Color = None,
+        write_text: bool = True,
+        text: str = None,
+        compressed: bool = True,
         verbose: bool = None,
         show_result_img: bool = None,
     ):
