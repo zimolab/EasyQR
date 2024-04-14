@@ -1,5 +1,5 @@
 from barcode import PROVIDED_BARCODES
-from function2widgets.widgets import ComboBox, DictEditor
+from function2widgets.widgets import ComboBox, DictEditor, IntSpinBox
 
 
 from easyqr.common import UNIVERSAL_CONFIGS
@@ -25,7 +25,9 @@ MAKE_BARCODE_CONFIGS = {
         "window_title": TR_BARCODE_EXTRA_ARGS_WINDOW_TITLE,
     },
     "module_width": {
-        
+        "widget_class": IntSpinBox.__name__,
+        "label": QApplication.tr("模块宽度"),
+        "default_value_description": QApplication.tr("使用默认值")
     },
     "module_height": {},
     "quiet_zone": {},
