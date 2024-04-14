@@ -1,10 +1,10 @@
 from function2widgets.widgets.numberinput import IntSpinBox, FloatSpinBox
 from function2widgets.widgets.numberinput import Slider
 from function2widgets.widgets.pathedit import FilePathEdit
-from function2widgets.widgets.selectwidget import ComboBox, RadioButtonGroup
+from function2widgets.widgets.selectwidget import ComboBox
 from pyguiadapter.commons import get_param_widget_factory
 
-from easyqr.commons import UNIVERSAL_CONFIGS
+from easyqr.common import UNIVERSAL_CONFIGS
 from .constants import *
 from .widget import ColorsGroupWidget
 
@@ -29,12 +29,6 @@ MAKE_QRCODE_CONFIGS = {
         "show_value_label": True,
         "value_prefix": QApplication.tr("当前级别："),
         "default_value_description": QApplication.tr("使用默认配置"),
-    },
-    "overwrite_behavior": {
-        "widget_class": RadioButtonGroup.__name__,
-        "label": QApplication.tr("覆盖行为"),
-        "items": OVERWRITE_BEHAVIORS,
-        "default": DEFAULT_OVERWRITE_BEHAVIOR,
     },
     "version": {
         "widget_class": Slider.__name__,
@@ -122,7 +116,6 @@ MAKE_QRCODE_CONFIGS = {
         "default": {},
         "colors": DEFAULT_COLOR_MASK_COLORS,
         "columns": 2,
-        # "default_value_description": QApplication.tr("不使用颜色遮罩"),
     },
     "embeded_image_path": {
         "widget_class": FilePathEdit.__name__,

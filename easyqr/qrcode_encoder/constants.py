@@ -79,20 +79,6 @@ MODULE_DRAWERS_SUPPORT_SIZE_RATIO = (
 )
 # -------------------------
 
-
-# ---overwrite behavior----
-OVERWRITE_BEHAVIOR_ASK = QApplication.tr("询问")
-OVERWRITE_BEHAVIOR_NOT_OVERWRITE = QApplication.tr("不覆盖")
-OVERWRITE_BEHAVIOR_OVERWRITE = QApplication.tr("覆盖")
-OVERWRITE_BEHAVIORS = (
-    OVERWRITE_BEHAVIOR_ASK,
-    OVERWRITE_BEHAVIOR_NOT_OVERWRITE,
-    OVERWRITE_BEHAVIOR_OVERWRITE,
-)
-DEFAULT_OVERWRITE_BEHAVIOR = OVERWRITE_BEHAVIORS[0]
-# -------------------------
-
-
 # --------color mask-------
 COLOR_MASK_SOLID_FILL = QApplication.tr("纯色填充")
 COLOR_MASK_RADIAL_GRADIENT = QApplication.tr("径向渐变(圆形)")

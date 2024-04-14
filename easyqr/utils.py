@@ -1,7 +1,6 @@
 import os.path
 import random
 import string
-from typing import Literal
 
 
 def curdir() -> str:
@@ -16,3 +15,11 @@ def rand_str(length: int = 8) -> str:
 
 def rand_filename(prefix: str = "", ext: str = ".png") -> str:
     return f"{prefix}{rand_str()}{ext}"
+
+
+def safe_pop(d: dict, key: str) -> bool:
+    try:
+        d.pop(key)
+        return True
+    except KeyError:
+        return False

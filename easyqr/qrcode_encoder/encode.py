@@ -14,9 +14,8 @@ from qrcode.image.styledpil import StyledPilImage
 from qrcode.image.styles.colormasks import ImageColorMask, QRColorMask
 
 from easyqr.utils import curdir
-from .configs import (
-    OVERWRITE_BEHAVIOR_ASK,
-    OVERWRITE_BEHAVIOR_OVERWRITE,
+from easyqr.common import OverwriteBehavior, get_overwrite_behavior
+from .constants import (
     ERR_CORRECTION_LEVELS,
     MODULE_DRAWERS,
     SQUARE_DRAWER,
@@ -123,13 +122,14 @@ def make_qrcode(
     if os.path.isfile(output_filepath):
         quit_msg = QApplication.tr("目标文件已存在，取消生成！")
         will_be_overwrite_msg = QApplication.tr("{}将被覆盖!".format(output_filepath))
-        if overwrite_behavior == OVERWRITE_BEHAVIOR_ASK:
+        behavior = get_overwrite_behavior(overwrite_behavior)
+        if behavior == OverwriteBehavior.Ask:
             if not _ask_if_overwrite(output_filepath):
                 logging.warning(quit_msg)
                 return
             else:
                 logging.warning(will_be_overwrite_msg)
-        elif overwrite_behavior == OVERWRITE_BEHAVIOR_OVERWRITE:
+        elif behavior == OverwriteBehavior.Overwrite:
             logging.warning(will_be_overwrite_msg)
         else:
             logging.warning(quit_msg)

@@ -2,7 +2,10 @@ from PyQt6.QtWidgets import QApplication
 from pyguiadapter.adapter import GUIAdapter
 from pyguiadapter.commons import DocumentFormat
 
-from easyqr import make_qrcode, MAKE_QRCODE_CONFIGS
+from easyqr.qrcode_encoder import FUNC_NAME as MAKE_QRCODE_FUNC_NAME
+from easyqr.qrcode_encoder import MAKE_QRCODE_CONFIGS, make_qrcode
+from easyqr.barcode_encoder import FUNC_NAME as MAKE_BARCODE_FUNC_NAME
+from easyqr.barcode_encoder import MAKE_BARCODE_CONFIGS, make_barcode
 
 APP_NAME = "Easy QR Code"
 VERSION = "0.1.0"
@@ -10,7 +13,13 @@ AUTHOR = "zimolab"
 
 
 def set_window_configs(adapter: GUIAdapter):
+    # 设置Selection Window
     adapter.selection_window_config.title = APP_NAME
+    adapter.selection_window_config.icon_mode = False
+    adapter.selection_window_config.func_list_label_text = QApplication.tr("功能列表")
+    adapter.selection_window_config.document_label_text = QApplication.tr("说明文档")
+    adapter.selection_window_config.select_button_text = QApplication.tr("选择功能")
+    # 设置 Execution Window
     adapter.execution_window_config.title = APP_NAME
     adapter.execution_window_config.show_func_result_dialog = False
     adapter.execution_window_config.print_func_result = False
@@ -33,8 +42,15 @@ def set_window_configs(adapter: GUIAdapter):
 def add_functions(adapter: GUIAdapter):
     adapter.add(
         make_qrcode,
-        document_format=DocumentFormat.MARKDOWN,
         widget_configs=MAKE_QRCODE_CONFIGS,
+        display_name=MAKE_QRCODE_FUNC_NAME,
+        document_format=DocumentFormat.MARKDOWN,
+    )
+    adapter.add(
+        make_barcode,
+        display_name=MAKE_BARCODE_FUNC_NAME,
+        widget_configs=MAKE_BARCODE_CONFIGS,
+        document_format=DocumentFormat.MARKDOWN,
     )
 
 

@@ -10,6 +10,7 @@ python = "^3.10, <4.0"
 pyguiadapter = ">=0.2.21"
 qrcode = {extras = ["pil"], version = "^7.4.2"}
 python-barcode = {extras = ["images"], version = "^0.15.1"}
+bidict = "^0.23.1"
 
 
 [build-system]
