@@ -25,17 +25,24 @@ TR_DESC_BARCODE_EXTRA_ARGS = QApplication.tr(
 TR_DESC_MODULE_WIDTH = QApplication.tr("条码中每个条块所占的宽度（单位mm）")
 TR_DESC_MODULE_HEIGHT = QApplication.tr("条码中每个条块所占的高度（单位mm）")
 TR_DESC_QUIET_ZONE = QApplication.tr("条码距离左右的边距（单位mm）")
-TR_DESC_FONT_PATH = QApplication.tr("文字字体路径，默认使用内置字体（DejaVuSansMono）")
+TR_DESC_FONT_PATH = QApplication.tr("文字字体路径")
 TR_DESC_FONT_SIZE = QApplication.tr("文字字体大小（单位pt）")
 TR_DESC_TEXT_DISTANCE = QApplication.tr("文字与条码距离（单位mm）")
 TR_DESC_BACKGROUND = QApplication.tr("背景颜色")
 TR_DESC_FOREGROUND = QApplication.tr("前景（文字）颜色")
 TR_DESC_CENTER_TEXT = QApplication.tr("文字是否居中")
 
-TR_ERR_BARCODE_TYPE = QApplication.tr("请选择条码类型")
-TR_BARCODE_EXTRA_ARGS_BUTTON_TEXT = QApplication.tr("查看/编辑")
-TR_BARCODE_EXTRA_ARGS_DEFAULT_DESC = QApplication.tr("无额外参数")
-TR_BARCODE_EXTRA_ARGS_WINDOW_TITLE = QApplication.tr("编辑条码额外参数")
-TR_FONT_PATH_BUTTON_TEXT = QApplication.tr("选择字体文件")
+TR_DEF_DESC_FONT_PATH = QApplication.tr("使用默认字体")
+TR_DEF_DESC_EXTRA_ARGS = QApplication.tr("无额外参数")
+
+TR_ERR_EMPTY_BARCODE_TYPE = QApplication.tr("条码类型不可为空，请选择条码类型！")
+TR_ERR_EMPTY_FONT_PATH = QApplication.tr("字体文件路径不可为空，请选择字体文件！")
+TR_ERR_FONT_NOT_FOUND = QApplication.tr("未找到字体文件：{}！")
+
+TR_WIN_TITLE_EXTRA_ARGS = QApplication.tr("编辑条码额外参数")
+TR_DIALOG_TITLE_FONT_PATH = QApplication.tr("选择字体文件")
+
+TR_BTN_TEXT_EXTRA_ARGS = QApplication.tr("查看/编辑")
+TR_BTN_TEXT_FONT_PATH = QApplication.tr("选择字体文件")
 
 TR_FILTERS_FONT_FILE = QApplication.tr("字体文件(*.ttf);;字体文件(*.otf);;字体文件(*.ttc);;字体文件(*.otf);;所有文件(*.*)")

@@ -20,9 +20,9 @@ MAKE_BARCODE_CONFIGS = {
         "description": TR_DESC_BARCODE_EXTRA_ARGS,
         "default": DEFAULT_BARCODE_EXTRA_ARGS,
         "display_current_value": False,
-        "button_text": TR_BARCODE_EXTRA_ARGS_BUTTON_TEXT,
-        "default_value_description": TR_BARCODE_EXTRA_ARGS_DEFAULT_DESC,
-        "window_title": TR_BARCODE_EXTRA_ARGS_WINDOW_TITLE,
+        "button_text": TR_BTN_TEXT_EXTRA_ARGS,
+        "default_value_description": TR_DEF_DESC_EXTRA_ARGS,
+        "window_title": TR_WIN_TITLE_EXTRA_ARGS,
     },
     "module_width": {
         "widget_class": FloatSpinBox.__name__,
@@ -60,6 +60,9 @@ MAKE_BARCODE_CONFIGS = {
         "label": TR_LABEL_FONT_PATH,
         "description": TR_DESC_FONT_PATH,
         "default": DEFAULT_FONT_PATH,
+        "button_text": TR_BTN_TEXT_FONT_PATH,
+        "default_value_description": TR_DEF_DESC_FONT_PATH,
+        "dialog_title": TR_DIALOG_TITLE_FONT_PATH,
         "filters": TR_FILTERS_FONT_FILE,
     },
     "font_size": {
