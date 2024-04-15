@@ -1,5 +1,5 @@
 from barcode import PROVIDED_BARCODES
-from function2widgets.widgets import ComboBox, DictEditor, IntSpinBox
+from function2widgets.widgets import ComboBox, DictEditor, IntSpinBox, FloatSpinBox, FilePathEdit
 
 
 from easyqr.common import UNIVERSAL_CONFIGS
@@ -25,16 +25,71 @@ MAKE_BARCODE_CONFIGS = {
         "window_title": TR_BARCODE_EXTRA_ARGS_WINDOW_TITLE,
     },
     "module_width": {
-        "widget_class": IntSpinBox.__name__,
-        "label": QApplication.tr("模块宽度"),
-        "default_value_description": QApplication.tr("使用默认值")
+        "widget_class": FloatSpinBox.__name__,
+        "label": TR_LABEL_MODULE_WIDTH,
+        "description": TR_DESC_MODULE_WIDTH,
+        "default": DEFAULT_MODULE_WIDTH,
+        "min_value": 0.10,
+        "max_value": 2.00,
+        "step": 0.01,
+        "decimals": 2,
     },
-    "module_height": {},
-    "quiet_zone": {},
-    "font_size": {},
-    "text_distance": {},
-    "background": {},
-    "foreground": {},
+    "module_height": {
+        "widget_class": FloatSpinBox.__name__,
+        "label": TR_LABEL_MODULE_HEIGHT,
+        "description": TR_DESC_MODULE_HEIGHT,
+        "default": DEFAULT_MODULE_HEIGHT,
+        "min_value": 10.00,
+        "max_value": 50.00,
+        "step": 0.05,
+        "decimals": 2,
+    },
+    "quiet_zone": {
+        "widget_class": FloatSpinBox.__name__,
+        "label": TR_LABEL_QUIET_ZONE,
+        "description": TR_DESC_QUIET_ZONE,
+        "default": DEFAULT_QUIET_ZONE,
+        "min_value": 1.00,
+        "max_value": 50.00,
+        "step": 0.05,
+        "decimals": 2,
+
+    },
+    "font_path": {
+        "widget_class": FilePathEdit.__name__,
+        "label": TR_LABEL_FONT_PATH,
+        "description": TR_DESC_FONT_PATH,
+        "default": DEFAULT_FONT_PATH,
+        "filters": TR_FILTERS_FONT_FILE,
+    },
+    "font_size": {
+        "widget_class": IntSpinBox.__name__,
+        "label": TR_LABEL_FONT_SIZE,
+        "description": TR_DESC_FONT_SIZE,
+        "default": DEFAULT_FONT_SIZE,
+        "min_value": 5,
+        "max_value": 50,
+    },
+    "text_distance": {
+        "widget_class": FloatSpinBox.__name__,
+        "label": TR_LABEL_TEXT_DISTANCE,
+        "description": TR_DESC_TEXT_DISTANCE,
+        "default": DEFAULT_TEXT_DISTANCE,
+        "min_value": 1.00,
+        "max_value": 50.00,
+        "step": 0.05,
+        "decimals": 2,
+    },
+    "background": {
+        "label": TR_LABEL_BACKGROUND,
+        "description": TR_DESC_BACKGROUND,
+        "default": DEFAULT_BACKGROUND,   
+    },
+    "foreground": {
+        "label": TR_LABEL_FOREGROUND,
+        "description": TR_DESC_FOREGROUND,
+        "default": DEFAULT_FOREGROUND,   
+    },
     "write_text": {},
     "text": {},
     "compressed": {},

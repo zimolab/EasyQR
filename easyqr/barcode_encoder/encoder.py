@@ -1,12 +1,13 @@
 import os
+from typing import Any
 
 from function2widgets.widgets.misc import Color
 from barcode import get_barcode_class
 from barcode.writer import SVGWriter, ImageWriter
 
-from easyqr.common import BaseEncoder
+from easyqr.common import BaseEncoder, is_same_filetype
 from easyqr.utils import safe_pop
-from ._constants import TR_ERR_BARCODE_TYPE
+from ._constants import TR_ERR_BARCODE_TYPE, DEFAULT_BACKGROUND, DEFAULT_FOREGROUND
 
 
 class BarCodeEncoder(BaseEncoder):
@@ -42,15 +43,15 @@ class BarCodeEncoder(BaseEncoder):
         overwrite_behavior: str,
         barcode_type: str = None,
         barcode_extra_args: dict = None,
-        module_width: int = None,
-        module_height: int = None,
+        module_width: float = None,
+        module_height: float = None,
         quiet_zone: int = None,
+        font_path: str = None,
         font_size: int = None,
+        text_distance: float = None,
         background: Color = None,
-        forground: Color = None,
-        write_text: bool = True,
-        text: str = None,
-        compressed: bool = True,
+        foreground: Color = None,
+        center_text: bool = None,
         verbose: bool = None,
         show_result_img: bool = None,
     ):
@@ -66,24 +67,50 @@ class BarCodeEncoder(BaseEncoder):
 
         if barcode_extra_args is None:
             barcode_extra_args = {}
-
         safe_pop(barcode_extra_args, "writer")
 
-        output_filepath = os.path.abspath(os.path.join(output_dir, output_filename))
-        _, ext = os.path.splitext(output_filepath)
-        output_svg_file = ext.lower() == ".svg"
 
-        if output_svg_file:
+        if background is None:
+            background = DEFAULT_BACKGROUND
+        if foreground is None:
+            foreground = DEFAULT_FOREGROUND
+        options = {}
+        self._add_options_to(options,
+                             module_width=module_width, 
+                             module_height=module_height,
+                             quiet_zone=quiet_zone,
+                             font_path=font_path,
+                             font_size=font_size,
+                             text_distance=text_distance,
+                             background=background.to_hex_string(with_alpha=False),
+                             foreground=foreground.to_hex_string(with_alpha=False),
+                             center_text=center_text)
+
+        output_filepath = os.path.abspath(os.path.join(output_dir, output_filename))
+        is_svg_file = is_same_filetype(path=output_filepath, file_ext=".svg")
+
+        if is_svg_file:
             writer = SVGWriter()
-            writer.set_options({"compressed": True})
         else:
             writer = ImageWriter()
+        
+        if options:
+            print(options)
+            writer.set_options(options)
+
         barcode_class = get_barcode_class(barcode_type)
         with open(output_filepath, "wb") as f:
-            ins = barcode_class(data, writer=writer)
+            ins = barcode_class(data, writer=writer, **barcode_extra_args)
             ins.write(f)
+        
         if show_result_img is True:
             self.print_image(output_filepath)
+    
+    @staticmethod
+    def _add_options_to(options: dict, **kvs):
+        for k, v in kvs.items():
+            if v is not None:
+                options[k] = v
 
 
 _global_instance = BarCodeEncoder()
