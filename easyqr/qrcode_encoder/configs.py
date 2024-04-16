@@ -6,7 +6,9 @@ from pyguiadapter.commons import get_param_widget_factory
 
 from easyqr.common import UNIVERSAL_CONFIGS
 from .constants import *
+from ._constants import *
 from .widget import ColorsGroupWidget
+
 
 # 注册自定义控件
 _param_widget_factory = get_param_widget_factory()
@@ -18,8 +20,8 @@ MAKE_QRCODE_CONFIGS = {
     **UNIVERSAL_CONFIGS,
     "optimize": {
         "widget_class": Slider.__name__,
-        "label": QApplication.tr("优化级别"),
-        "default": None,
+        "label": TR_LABEL_OPTIMIZE,
+        "default": DEFAULT_OPTIMIZE,
         "min_value": 0,
         "max_value": 100,
         "step": 1,
@@ -27,8 +29,8 @@ MAKE_QRCODE_CONFIGS = {
         "tick_interval": 2,
         "tracking": True,
         "show_value_label": True,
-        "value_prefix": QApplication.tr("当前级别："),
-        "default_value_description": QApplication.tr("使用默认配置"),
+        "value_prefix": TR_VALUE_PREFIX_OPTIMIZE,
+        "default_value_description": TR_DEF_DESC_OPTIMIZE,
     },
     "version": {
         "widget_class": Slider.__name__,

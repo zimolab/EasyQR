@@ -44,13 +44,13 @@ def add_functions(adapter: GUIAdapter):
         make_qrcode,
         widget_configs=MAKE_QRCODE_CONFIGS,
         display_name=MAKE_QRCODE_FUNC_NAME,
-        document_format=DocumentFormat.MARKDOWN,
+        document_format=DocumentFormat.HTML,
     )
     adapter.add(
         make_barcode,
         display_name=MAKE_BARCODE_FUNC_NAME,
         widget_configs=MAKE_BARCODE_CONFIGS,
-        document_format=DocumentFormat.MARKDOWN,
+        document_format=DocumentFormat.HTML,
     )
 
 

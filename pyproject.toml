@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10, <4.0"
-pyguiadapter = ">=0.2.23"
+pyguiadapter = ">=0.2.25"
 qrcode = {extras = ["pil"], version = "^7.4.2"}
 python-barcode = {extras = ["images"], version = "^0.15.1"}
 
@@ -16,20 +16,20 @@ python-barcode = {extras = ["images"], version = "^0.15.1"}
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-
-[[tool.poetry.source]]
-name = "ali"
-url = "https://mirrors.aliyun.com/pypi/simple/"
-priority = "primary"
-
-
-[[tool.poetry.source]]
-name = "tencent"
-url = "https://mirrors.cloud.tencent.com/pypi/simple/"
-priority = "primary"
-
-
-[[tool.poetry.source]]
-name = "tsinghua"
-url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/"
-priority = "default"
+#
+#[[tool.poetry.source]]
+#name = "ali"
+#url = "https://mirrors.aliyun.com/pypi/simple/"
+#priority = "primary"
+#
+#
+#[[tool.poetry.source]]
+#name = "tencent"
+#url = "https://mirrors.cloud.tencent.com/pypi/simple/"
+#priority = "primary"
+#
+#
+#[[tool.poetry.source]]
+#name = "tsinghua"
+#url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/"
+#priority = "default"

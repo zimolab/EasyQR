@@ -11,11 +11,6 @@ files = [
     {file = "colorama-0.4.6.tar.gz", hash = "sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44"},
 ]
 
-[package.source]
-type = "legacy"
-url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple"
-reference = "tsinghua"
-
 [[package]]
 name = "docstring-parser"
 version = "0.16"
@@ -27,33 +22,22 @@ files = [
     {file = "docstring_parser-0.16.tar.gz", hash = "sha256:538beabd0af1e2db0146b6bd3caa526c35a34d61af9fd2887f3a8a27a739aa6e"},
 ]
 
-[package.source]
-type = "legacy"
-url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple"
-reference = "tsinghua"
-
 [[package]]
 name = "function2widgets"
-version = "0.6.12"
+version = "0.6.14"
 description = ""
 optional = false
-python-versions = ">=3.8,<4.0"
+python-versions = "<4.0,>=3.8"
 files = [
-    {file = "function2widgets-0.6.12-py3-none-any.whl", hash = "sha256:874b7d296567d8cf4be94c21514019ec92b00628daa5d78ab2814d7be59ab23b"},
-    {file = "function2widgets-0.6.12.tar.gz", hash = "sha256:dfa413ec7e0575a86f4e0be9bb5f57675387aa094c01af2062ff93b509480de0"},
+    {file = "function2widgets-0.6.14-py3-none-any.whl", hash = "sha256:0b4fe97e8041695a143949ea72035d7b309472daf07216f91b3bcfc578f097d0"},
+    {file = "function2widgets-0.6.14.tar.gz", hash = "sha256:7afdae630754e32f81a4254ccaf5ef90e31e348343cac549c82e079df6af2afb"},
 ]
 
 [package.dependencies]
 docstring-parser = ">=0.16,<0.17"
-pyqt6 = ">=6.6.1,<7.0.0"
+pyqt6 = ">=6.4.2"
 pyqt6-qscintilla = ">=2.14.1,<3.0.0"
 tomli = ">=2.0.1,<3.0.0"
-tomli-w = ">=1.0.0,<2.0.0"
-
-[package.source]
-type = "legacy"
-url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple"
-reference = "tsinghua"
 
 [[package]]
 name = "pillow"
@@ -141,29 +125,19 @@ tests = ["check-manifest", "coverage", "defusedxml", "markdown2", "olefile", "pa
 typing = ["typing-extensions"]
 xmp = ["defusedxml"]
 
-[package.source]
-type = "legacy"
-url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple"
-reference = "tsinghua"
-
 [[package]]
 name = "pyguiadapter"
-version = "0.2.23"
+version = "0.2.25"
 description = "turn (almost) any python functions into a gui in a few lines of code"
 optional = false
-python-versions = ">=3.8,<4.0"
+python-versions = "<4.0,>=3.8"
 files = [
-    {file = "pyguiadapter-0.2.23-py3-none-any.whl", hash = "sha256:c3133c2fb5699446e335cd10f4c799c29e91d3bf4fd6b0c59fe1bb1d1233b739"},
-    {file = "pyguiadapter-0.2.23.tar.gz", hash = "sha256:e4c86755d70effe3beb0545e710573c902aac87cfb4a92da602f71215f2c4645"},
+    {file = "pyguiadapter-0.2.25-py3-none-any.whl", hash = "sha256:fbc5191fad495bb7662f279c1f5d44fbc48eb2e05a73237301d80f81a242632c"},
+    {file = "pyguiadapter-0.2.25.tar.gz", hash = "sha256:7999c8405ea515d758949ec4cacd4ddf33237367d230d653241e19737ef3d925"},
 ]
 
 [package.dependencies]
-function2widgets = ">=0.6.12"
-
-[package.source]
-type = "legacy"
-url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple"
-reference = "tsinghua"
+function2widgets = ">=0.6.14"
 
 [[package]]
 name = "pypng"
@@ -175,11 +149,6 @@ files = [
     {file = "pypng-0.20220715.0-py3-none-any.whl", hash = "sha256:4a43e969b8f5aaafb2a415536c1a8ec7e341cd6a3f957fd5b5f32a4cfeed902c"},
     {file = "pypng-0.20220715.0.tar.gz", hash = "sha256:739c433ba96f078315de54c0db975aee537cbc3e1d0ae4ed9aab0ca1e427e2c1"},
 ]
-
-[package.source]
-type = "legacy"
-url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple"
-reference = "tsinghua"
 
 [[package]]
 name = "pyqt6"
@@ -198,11 +167,6 @@ files = [
 PyQt6-Qt6 = ">=6.6.0"
 PyQt6-sip = ">=13.6,<14"
 
-[package.source]
-type = "legacy"
-url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple"
-reference = "tsinghua"
-
 [[package]]
 name = "pyqt6-qscintilla"
 version = "2.14.1"
@@ -220,11 +184,6 @@ files = [
 PyQt6 = ">=6.0.3"
 PyQt6-sip = ">=13.4,<14"
 
-[package.source]
-type = "legacy"
-url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple"
-reference = "tsinghua"
-
 [[package]]
 name = "pyqt6-qt6"
 version = "6.6.3"
@@ -237,11 +196,6 @@ files = [
     {file = "PyQt6_Qt6-6.6.3-py3-none-manylinux_2_28_x86_64.whl", hash = "sha256:6ae465dfcbb819dae5e18e8c96abba735b5bb2f16c066497dda4b7ca17c066ce"},
     {file = "PyQt6_Qt6-6.6.3-py3-none-win_amd64.whl", hash = "sha256:dbe509eccc579f8818b2b2e8ba93e27986facdd1d4d83ef1c7d9bd47cdf32651"},
 ]
-
-[package.source]
-type = "legacy"
-url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple"
-reference = "tsinghua"
 
 [[package]]
 name = "pyqt6-sip"
@@ -273,11 +227,6 @@ files = [
     {file = "PyQt6_sip-13.6.0.tar.gz", hash = "sha256:2486e1588071943d4f6657ba09096dc9fffd2322ad2c30041e78ea3f037b5778"},
 ]
 
-[package.source]
-type = "legacy"
-url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple"
-reference = "tsinghua"
-
 [[package]]
 name = "python-barcode"
 version = "0.15.1"
@@ -294,11 +243,6 @@ pillow = {version = "*", optional = true, markers = "extra == \"images\""}
 
 [package.extras]
 images = ["pillow"]
-
-[package.source]
-type = "legacy"
-url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple"
-reference = "tsinghua"
 
 [[package]]
 name = "qrcode"
@@ -324,11 +268,6 @@ maintainer = ["zest.releaser[recommended]"]
 pil = ["pillow (>=9.1.0)"]
 test = ["coverage", "pytest"]
 
-[package.source]
-type = "legacy"
-url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple"
-reference = "tsinghua"
-
 [[package]]
 name = "tomli"
 version = "2.0.1"
@@ -339,27 +278,6 @@ files = [
     {file = "tomli-2.0.1-py3-none-any.whl", hash = "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc"},
     {file = "tomli-2.0.1.tar.gz", hash = "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"},
 ]
-
-[package.source]
-type = "legacy"
-url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple"
-reference = "tsinghua"
-
-[[package]]
-name = "tomli-w"
-version = "1.0.0"
-description = "A lil' TOML writer"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "tomli_w-1.0.0-py3-none-any.whl", hash = "sha256:9f2a07e8be30a0729e533ec968016807069991ae2fd921a78d42f429ae5f4463"},
-    {file = "tomli_w-1.0.0.tar.gz", hash = "sha256:f463434305e0336248cac9c2dc8076b707d8a12d019dd349f5c1e382dd1ae1b9"},
-]
-
-[package.source]
-type = "legacy"
-url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple"
-reference = "tsinghua"
 
 [[package]]
 name = "typing-extensions"
@@ -372,12 +290,7 @@ files = [
     {file = "typing_extensions-4.11.0.tar.gz", hash = "sha256:83f085bd5ca59c80295fc2a82ab5dac679cbe02b9f33f7d83af68e241bea51b0"},
 ]
 
-[package.source]
-type = "legacy"
-url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple"
-reference = "tsinghua"
-
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10, <4.0"
-content-hash = "4ef96b37994e6952ae92ce0359df10e47a3a08c32b5149da84f34ad08a11ecaf"
+content-hash = "5252e26760c5e2e3b2830196471d7b54125a7e4a8e42ed6717cd010e666ea96c"

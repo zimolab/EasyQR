@@ -9,9 +9,9 @@ from function2widgets.widgets.misc import Color
 from pyguiadapter.interact import ulogging as logging
 from pyguiadapter.interact import upopup
 from pyguiadapter.interact.uprint import uprint
-from qrcode.image.base import QRModuleDrawer
 from qrcode.image.styledpil import StyledPilImage
 from qrcode.image.styles.colormasks import ImageColorMask, QRColorMask
+from qrcode.image.styles.moduledrawers.base import QRModuleDrawer
 
 from easyqr.utils import curdir
 from easyqr.common import OverwriteBehavior, get_overwrite_behavior
@@ -51,12 +51,13 @@ def make_qrcode(
     display_qrcode_img: bool,
 ):
     """
-    为制定文本数据生成二维码图像，并保存到本地文件。可通过多个参数控制二维码生成结果。
-
-    二维码生成基于**python-qrcode**，请参考：
-    [https://github.com/lincolnloop/python-qrcode](https://github.com/lincolnloop/python-qrcode)
-    获取该库详细信息以及各参数作用及取值。
-
+    为指定文本数据生成二维码图像，并保存到本地文件。可通过多个参数控制二维码生成结果。
+    <br>
+    <br>
+    二维码生成基于<b>python-qrcode</b>，
+    请参考：<a href='https://github.com/lincolnloop/python-qrcode'>python-qrcode官方文档</a>，获取详细信息以及各参数作用与取值。
+    <br>
+    <br>
     Note: 经过测试，在生成SVG格式的图片时，填充色和背景色设置可能无法生效。
 
     :param output_dir: 输出文件目录，若为空，则将当前工作目录作为输出文件目录
