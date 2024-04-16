@@ -7,6 +7,7 @@ TR_LABEL_DATA = QApplication.tr("待编码数据")
 TR_LABEL_OVERWRITE_BEHAVIOR = QApplication.tr("覆盖行为")
 TR_LABEL_VERBOSE = QApplication.tr("详细模式")
 TR_LABEL_SHOW_RESULT_IMG = QApplication.tr("显示结果图片")
+TR_LABEL_CENTER_TEXT = QApplication.tr("文字居中")
 
 TR_OVERWRITE_ASK = QApplication.tr("询问")
 TR_OVERWRITE_NOT_OVERWRITE = QApplication.tr("不覆盖")
@@ -28,11 +29,10 @@ TR_DESC_SHOW_RESULT_IMG = QApplication.tr(
     "生成图片的具体效果请使用图片查看软件打开生文件进行查看！<br>"
 )
 
-TR_SELECT_BUTTON_TEXT = QApplication.tr("选择")
-TR_MAKE_DIRS_TEXT = QApplication.tr("自动创建文件夹")
-TR_VERBOSE_TEXT = QApplication.tr("启用详细模式")
-TR_SHOW_RESULT_IMG_TEXT = QApplication.tr("是否显示结果图片")
-
+TR_BTN_TEXT_SELECT_DIR = QApplication.tr("选择目录")
+TR_CHECKBOX_TEXT_MAKE_DIRS = QApplication.tr("自动创建文件夹")
+TR_CHECKBOX_TEXT_VERBOSE = QApplication.tr("启用详细模式")
+TR_CHECKBOX_TEXT_SHOW_RESULT_IMG = QApplication.tr("是否显示结果图片")
 
 TR_ERR_INVALID_OVERWRITE_BEHAVIOR = QApplication.tr("无效的覆盖行为！({})")
 TR_ERR_OUTPUT_DIR_NOT_EXIST = QApplication.tr("目标文件夹不存在！（{}）")
