@@ -127,8 +127,11 @@ class BaseEncoder(abc.ABC):
         output_filename: str,
         data: str,
         overwrite_behavior: str,
+        verbose: bool,
         **kwargs,
     ):
+        if verbose is not None:
+            self.verbose = verbose is True
         self.check_arguments(
             output_dir=output_dir,
             make_dirs=make_dirs,

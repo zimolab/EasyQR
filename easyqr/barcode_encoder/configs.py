@@ -1,5 +1,11 @@
 from barcode import PROVIDED_BARCODES
-from function2widgets.widgets import ComboBox, DictEditor, IntSpinBox, FloatSpinBox, FilePathEdit
+from function2widgets.widgets import (
+    ComboBox,
+    DictEditor,
+    IntSpinBox,
+    FloatSpinBox,
+    FilePathEdit,
+)
 
 
 from easyqr.common import UNIVERSAL_CONFIGS
@@ -7,6 +13,12 @@ from ._constants import *
 
 MAKE_BARCODE_CONFIGS = {
     **UNIVERSAL_CONFIGS,
+    "text": {
+        "label": TR_LABEL_TEXT,
+        "default": DEFAULT_TEXT,
+        "description": TR_DESC_TEXT,
+        "default_value_description": TR_DEF_DESC_TEXT,
+    },
     "barcode_type": {
         "widget_class": ComboBox.__name__,
         "label": TR_LABEL_BARCODE_TYPE,
@@ -23,6 +35,22 @@ MAKE_BARCODE_CONFIGS = {
         "button_text": TR_BTN_TEXT_EXTRA_ARGS,
         "default_value_description": TR_DEF_DESC_EXTRA_ARGS,
         "window_title": TR_WIN_TITLE_EXTRA_ARGS,
+    },
+    "dpi": {
+        "widget_class": IntSpinBox.__name__,
+        "label": TR_LABEL_DPI,
+        "description": TR_DESC_DPI,
+        "default": DEFAULT_DPI,
+        "min_value": 150,
+        "max_value": 1500,
+        "step": 50,
+        "default_value_description": TR_DEF_DESC_DPI,
+    },
+    "compress": {
+        "label": TR_LABEL_COMPRESS,
+        "description": TR_DESC_COMPRESS,
+        "text": TR_CHECKBOX_TEXT_COMPRESS,
+        "default": DEFAULT_COMPRESS,
     },
     "module_width": {
         "widget_class": FloatSpinBox.__name__,
@@ -53,7 +81,6 @@ MAKE_BARCODE_CONFIGS = {
         "max_value": 50.00,
         "step": 0.05,
         "decimals": 2,
-
     },
     "font_path": {
         "widget_class": FilePathEdit.__name__,
@@ -86,14 +113,17 @@ MAKE_BARCODE_CONFIGS = {
     "background": {
         "label": TR_LABEL_BACKGROUND,
         "description": TR_DESC_BACKGROUND,
-        "default": DEFAULT_BACKGROUND,   
+        "default": DEFAULT_BACKGROUND,
     },
     "foreground": {
         "label": TR_LABEL_FOREGROUND,
         "description": TR_DESC_FOREGROUND,
-        "default": DEFAULT_FOREGROUND,   
+        "default": DEFAULT_FOREGROUND,
     },
-    "write_text": {},
-    "text": {},
-    "compressed": {},
+    "center_text": {
+        "label": TR_LABEL_CENTER_TEXT,
+        "text": TR_CHECKBOX_TEXT_CENTER_TEXT,
+        "description": TR_DESC_CENTER_TEXT,
+        "default": DEFAULT_CENTER_TEXT,
+    },
 }
