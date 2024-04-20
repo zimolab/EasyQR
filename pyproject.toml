@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10, <4.0"
-pyguiadapter = ">=0.2.25"
+pyguiadapter = ">=0.3.2"
 qrcode = {extras = ["pil"], version = "^7.4.2"}
 python-barcode = {extras = ["images"], version = "^0.15.1"}
 

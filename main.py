@@ -1,6 +1,5 @@
 from PyQt6.QtWidgets import QApplication
-from pyguiadapter.adapter import GUIAdapter
-from pyguiadapter.commons import DocumentFormat
+from pyguiadapter import DocumentFormat, GUIAdapter
 
 from easyqr.qrcode_encoder import FUNC_NAME as MAKE_QRCODE_FUNC_NAME
 from easyqr.qrcode_encoder import MAKE_QRCODE_CONFIGS, make_qrcode
